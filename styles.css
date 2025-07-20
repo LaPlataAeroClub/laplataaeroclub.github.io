@@ -583,16 +583,16 @@ section {
 
 .founder-card {
     background: white;
-    padding: 24px;
-    border-radius: 20px;
-    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+    padding: 20px;
+    border-radius: 16px;
+    box-shadow: 0 2px 12px rgba(0, 0, 0, 0.06);
     transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
     border: 1px solid rgba(0, 0, 0, 0.05);
     position: relative;
     overflow: hidden;
     display: flex;
     flex-direction: column;
-    min-height: 280px;
+    min-height: 200px;
 }
 
 .founder-card::before {
@@ -632,13 +632,13 @@ section {
 .founder-content {
     flex: 1;
     text-align: center;
-    margin-bottom: 20px;
+    margin-bottom: 16px;
 }
 
 .founder-content h3 {
-    font-size: 20px;
+    font-size: 18px;
     font-weight: 700;
-    margin-bottom: 6px;
+    margin-bottom: 4px;
     color: #1d1d1f;
     transition: color 0.3s ease;
 }
@@ -648,25 +648,25 @@ section {
 }
 
 .founder-title {
-    font-size: 12px;
+    font-size: 11px;
     color: #007aff;
     font-weight: 600;
-    margin-bottom: 12px;
+    margin-bottom: 10px;
     text-transform: uppercase;
     letter-spacing: 0.5px;
 }
 
 .founder-description {
-    font-size: 13px;
+    font-size: 12px;
     color: #86868b;
-    line-height: 1.5;
+    line-height: 1.4;
 }
 
 .founder-image {
-    width: 80px;
-    height: 80px;
+    width: 50px;
+    height: 50px;
     margin: 0 auto;
-    border-radius: 20px;
+    border-radius: 16px;
     overflow: hidden;
     display: flex;
     align-items: center;
@@ -674,7 +674,7 @@ section {
     background: linear-gradient(135deg, #f0f0f2 0%, #e8e8ea 100%);
     position: relative;
     transition: all 0.3s ease;
-    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
     flex-shrink: 0;
 }
 
@@ -695,7 +695,7 @@ section {
 }
 
 .founder-placeholder {
-    font-size: 32px;
+    font-size: 20px;
     color: #86868b;
     transition: all 0.3s ease;
 }
@@ -737,26 +737,26 @@ section {
     }
     
     .founder-card {
-        padding: 20px;
-        min-height: 260px;
+        padding: 16px;
+        min-height: 180px;
     }
     
     .founder-content h3 {
-        font-size: 18px;
+        font-size: 16px;
     }
     
     .founder-description {
-        font-size: 12px;
+        font-size: 11px;
     }
     
     .founder-image {
-        width: 70px;
-        height: 70px;
-        border-radius: 18px;
+        width: 40px;
+        height: 40px;
+        border-radius: 12px;
     }
     
     .founder-placeholder {
-        font-size: 28px;
+        font-size: 16px;
     }
 }
 
@@ -767,21 +767,21 @@ section {
     }
     
     .founder-card {
-        min-height: 240px;
+        min-height: 160px;
     }
     
     .founder-content h3 {
-        font-size: 16px;
+        font-size: 15px;
     }
     
     .founder-image {
-        width: 60px;
-        height: 60px;
-        border-radius: 16px;
+        width: 35px;
+        height: 35px;
+        border-radius: 10px;
     }
     
     .founder-placeholder {
-        font-size: 24px;
+        font-size: 14px;
     }
 }
 
