@@ -40,230 +40,210 @@ window.addEventListener('scroll', () => {
     }
 });
 
-// Intersection Observer for animations
+// Enhanced Intersection Observer for smoother animations
 const observerOptions = {
-    threshold: 0.1,
-    rootMargin: '0px 0px -50px 0px'
+    threshold: 0.15,
+    rootMargin: '0px 0px -80px 0px'
 };
 
 const observer = new IntersectionObserver((entries) => {
-    entries.forEach(entry => {
+    entries.forEach((entry, index) => {
         if (entry.isIntersecting) {
-            entry.target.style.animation = 'fadeInUp 0.8s ease-out';
-            entry.target.style.opacity = '1';
-            entry.target.style.transform = 'translateY(0)';
+            // Add staggered delay based on element position
+            setTimeout(() => {
+                entry.target.style.animation = 'fadeInUp 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards';
+                entry.target.style.opacity = '1';
+                entry.target.style.transform = 'translateY(0)';
+            }, index * 100);
         }
     });
 }, observerOptions);
 
-// Observe elements for animations
+// Enhanced scroll animations with performance optimization
 document.addEventListener('DOMContentLoaded', () => {
-    const animatedElements = document.querySelectorAll('.about-card, .project-card, .resource-category, .competition-card, .founder-card');
+    // Initialize animations for all cards
+    const animatedElements = document.querySelectorAll('.about-card, .project-card, .resource-category, .founder-card');
     
-    animatedElements.forEach(el => {
+    animatedElements.forEach((el, index) => {
         el.style.opacity = '0';
-        el.style.transform = 'translateY(30px)';
+        el.style.transform = 'translateY(40px)';
+        el.style.transition = 'all 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94)';
         observer.observe(el);
     });
-});
 
-// Form submission
-const contactForm = document.querySelector('.form');
-if (contactForm) {
-    contactForm.addEventListener('submit', function(e) {
-        e.preventDefault();
-        
-        // Get form data
-        const formData = new FormData(this);
-        const name = this.querySelector('input[type="text"]').value;
-        const email = this.querySelector('input[type="email"]').value;
-        const message = this.querySelector('textarea').value;
-        
-        // Simple validation
-        if (!name || !email || !message) {
-            showNotification('Please fill in all fields.', 'error');
-            return;
-        }
-        
-        if (!isValidEmail(email)) {
-            showNotification('Please enter a valid email address.', 'error');
-            return;
-        }
-        
-        // Simulate form submission
-        const submitBtn = this.querySelector('.btn');
-        const originalText = submitBtn.textContent;
-        submitBtn.textContent = 'Sending...';
-        submitBtn.disabled = true;
-        
-        setTimeout(() => {
-            showNotification('Thank you for your message! We\'ll get back to you soon.', 'success');
-            this.reset();
-            submitBtn.textContent = originalText;
-            submitBtn.disabled = false;
-        }, 2000);
+    // Add parallax effect to section headers
+    const sectionHeaders = document.querySelectorAll('.section-header');
+    sectionHeaders.forEach(header => {
+        header.style.opacity = '0';
+        header.style.transform = 'translateY(30px)';
+        observer.observe(header);
     });
-}
-
-// Email validation
-function isValidEmail(email) {
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    return emailRegex.test(email);
-}
-
-// Notification system
-function showNotification(message, type = 'success') {
-    // Remove existing notifications
-    const existingNotification = document.querySelector('.notification');
-    if (existingNotification) {
-        existingNotification.remove();
-    }
-    
-    // Create notification element
-    const notification = document.createElement('div');
-    notification.className = `notification notification-${type}`;
-    notification.innerHTML = `
-        <div class="notification-content">
-            <span class="notification-icon">${type === 'success' ? '✅' : '❌'}</span>
-            <span class="notification-message">${message}</span>
-            <button class="notification-close">×</button>
-        </div>
-    `;
-    
-    // Add styles
-    notification.style.cssText = `
-        position: fixed;
-        top: 100px;
-        right: 20px;
-        background: ${type === 'success' ? '#34c759' : '#ff3b30'};
-        color: white;
-        padding: 16px 24px;
-        border-radius: 12px;
-        box-shadow: 0 8px 30px rgba(0, 0, 0, 0.2);
-        z-index: 10000;
-        transform: translateX(400px);
-        transition: transform 0.3s ease;
-        max-width: 400px;
-    `;
-    
-    notification.querySelector('.notification-content').style.cssText = `
-        display: flex;
-        align-items: center;
-        gap: 12px;
-    `;
-    
-    notification.querySelector('.notification-close').style.cssText = `
-        background: none;
-        border: none;
-        color: white;
-        font-size: 20px;
-        cursor: pointer;
-        padding: 0;
-        margin-left: auto;
-    `;
-    
-    // Add to DOM
-    document.body.appendChild(notification);
-    
-    // Animate in
-    setTimeout(() => {
-        notification.style.transform = 'translateX(0)';
-    }, 100);
-    
-    // Auto remove after 5 seconds
-    setTimeout(() => {
-        removeNotification(notification);
-    }, 5000);
-    
-    // Close button
-    notification.querySelector('.notification-close').addEventListener('click', () => {
-        removeNotification(notification);
-    });
-}
-
-function removeNotification(notification) {
-    notification.style.transform = 'translateX(400px)';
-    setTimeout(() => {
-        if (notification.parentNode) {
-            notification.parentNode.removeChild(notification);
-        }
-    }, 300);
-}
-
-// Parallax effect for hero section
-window.addEventListener('scroll', () => {
-    const scrolled = window.pageYOffset;
-    const heroImage = document.querySelector('.hero-image');
-    const heroContent = document.querySelector('.hero-content');
-    
-    if (heroImage) {
-        heroImage.style.transform = `translateY(${scrolled * 0.3}px)`;
-    }
-    
-    if (heroContent) {
-        heroContent.style.transform = `translateY(${scrolled * 0.1}px)`;
-    }
 });
 
-// Add loading animation
-window.addEventListener('load', () => {
-    document.body.style.opacity = '0';
-    document.body.style.transition = 'opacity 0.5s ease';
-    
-    setTimeout(() => {
-        document.body.style.opacity = '1';
-    }, 100);
-});
+// Enhanced navbar scroll behavior
+const navbar = document.querySelector('.navbar');
+let lastScrollY = window.scrollY;
+let ticking = false;
 
-// Rocket animation enhancement
+function updateNavbar() {
+    const scrollY = window.scrollY;
+    
+    if (scrollY > 100) {
+        navbar.classList.add('scrolled');
+    } else {
+        navbar.classList.remove('scrolled');
+    }
+    
+    // Hide/show navbar based on scroll direction
+    if (scrollY > lastScrollY && scrollY > 200) {
+        navbar.style.transform = 'translateY(-100%)';
+    } else {
+        navbar.style.transform = 'translateY(0)';
+    }
+    
+    lastScrollY = scrollY;
+    ticking = false;
+}
+
+function requestNavbarUpdate() {
+    if (!ticking) {
+        requestAnimationFrame(updateNavbar);
+        ticking = true;
+    }
+}
+
+window.addEventListener('scroll', requestNavbarUpdate);
+
+// Enhanced rocket animation with modern interactions
 document.addEventListener('DOMContentLoaded', () => {
     const rocket = document.querySelector('.rocket');
-    if (rocket) {
+    const rocketAnimation = document.querySelector('.rocket-animation');
+    
+    if (rocket && rocketAnimation) {
         let isHovering = false;
+        let animationId;
         
-        rocket.addEventListener('mouseenter', () => {
+        // Enhanced hover interactions
+        rocketAnimation.addEventListener('mouseenter', () => {
             isHovering = true;
-            rocket.style.transform = 'translate(-50%, -50%) scale(1.2) rotate(5deg)';
-            rocket.style.transition = 'transform 0.3s ease';
+            rocket.style.animationPlayState = 'paused';
+            rocket.style.transform = 'translate(-50%, -50%) scale(1.3) rotate(15deg)';
+            rocket.style.transition = 'transform 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94)';
+            
+            // Add sparkle effect
+            createSparkles(rocketAnimation);
         });
         
-        rocket.addEventListener('mouseleave', () => {
+        rocketAnimation.addEventListener('mouseleave', () => {
             isHovering = false;
+            rocket.style.animationPlayState = 'running';
             rocket.style.transform = 'translate(-50%, -50%) scale(1) rotate(0deg)';
+            
+            // Remove sparkles
+            const sparkles = rocketAnimation.querySelectorAll('.sparkle');
+            sparkles.forEach(sparkle => sparkle.remove());
         });
         
-        // Random rocket movements
-        setInterval(() => {
+        // Click animation
+        rocketAnimation.addEventListener('click', () => {
+            rocket.style.animation = 'none';
+            rocket.style.transform = 'translate(-50%, -50%) scale(1.5) rotate(360deg)';
+            
+            setTimeout(() => {
+                rocket.style.animation = 'float 4s ease-in-out infinite';
+                rocket.style.transform = 'translate(-50%, -50%)';
+            }, 600);
+        });
+        
+        // Random subtle movements when not hovering
+        function subtleMovement() {
             if (!isHovering) {
-                const randomX = (Math.random() - 0.5) * 20;
-                const randomY = (Math.random() - 0.5) * 20;
-                rocket.style.transform = `translate(calc(-50% + ${randomX}px), calc(-50% + ${randomY}px))`;
+                const randomX = (Math.random() - 0.5) * 15;
+                const randomY = (Math.random() - 0.5) * 15;
+                const randomRotation = (Math.random() - 0.5) * 8;
+                
+                rocket.style.transform = `translate(calc(-50% + ${randomX}px), calc(-50% + ${randomY}px)) rotate(${randomRotation}deg)`;
                 
                 setTimeout(() => {
                     if (!isHovering) {
-                        rocket.style.transform = 'translate(-50%, -50%)';
+                        rocket.style.transform = 'translate(-50%, -50%) rotate(0deg)';
                     }
-                }, 1000);
+                }, 1500);
             }
-        }, 5000);
+            
+            animationId = setTimeout(subtleMovement, Math.random() * 4000 + 3000);
+        }
+        
+        subtleMovement();
     }
 });
 
-// Enhanced star animation
+// Create sparkle effect
+function createSparkles(container) {
+    for (let i = 0; i < 8; i++) {
+        const sparkle = document.createElement('div');
+        sparkle.className = 'sparkle';
+        sparkle.style.cssText = `
+            position: absolute;
+            width: 4px;
+            height: 4px;
+            background: white;
+            border-radius: 50%;
+            pointer-events: none;
+            top: ${Math.random() * 100}%;
+            left: ${Math.random() * 100}%;
+            animation: sparkleFloat 2s ease-out infinite;
+            animation-delay: ${Math.random() * 1}s;
+            box-shadow: 0 0 10px rgba(255, 255, 255, 0.8);
+        `;
+        container.appendChild(sparkle);
+    }
+}
+
+// Enhanced star animations with random positioning
 document.addEventListener('DOMContentLoaded', () => {
     const stars = document.querySelectorAll('.star');
     stars.forEach((star, index) => {
-        // Random star positions
-        const randomTop = Math.random() * 80 + 10;
-        const randomLeft = Math.random() * 80 + 10;
+        // More dynamic positioning
+        const randomTop = Math.random() * 70 + 15;
+        const randomLeft = Math.random() * 70 + 15;
         star.style.top = randomTop + '%';
         star.style.left = randomLeft + '%';
         
-        // Random animation delays
-        star.style.animationDelay = Math.random() * 2 + 's';
-        star.style.animationDuration = (Math.random() * 2 + 1) + 's';
+        // Varied animation properties
+        star.style.animationDelay = Math.random() * 3 + 's';
+        star.style.animationDuration = (Math.random() * 2 + 2) + 's';
+        
+        // Add random movement
+        star.addEventListener('animationiteration', () => {
+            const newTop = Math.random() * 70 + 15;
+            const newLeft = Math.random() * 70 + 15;
+            star.style.transition = 'all 2s ease-in-out';
+            star.style.top = newTop + '%';
+            star.style.left = newLeft + '%';
+        });
     });
 });
+
+// Add sparkle animation CSS
+const sparkleStyles = document.createElement('style');
+sparkleStyles.textContent = `
+    @keyframes sparkleFloat {
+        0% {
+            opacity: 0;
+            transform: translateY(0) scale(0);
+        }
+        50% {
+            opacity: 1;
+            transform: translateY(-20px) scale(1);
+        }
+        100% {
+            opacity: 0;
+            transform: translateY(-40px) scale(0);
+        }
+    }
+`;
+document.head.appendChild(sparkleStyles);
 
 // Active navigation link highlighting
 window.addEventListener('scroll', () => {
