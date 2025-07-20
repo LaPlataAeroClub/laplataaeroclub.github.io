@@ -322,6 +322,94 @@ section {
     line-height: 1.6;
 }
 
+/* Founders Section */
+.founders-section {
+    margin-top: 120px;
+}
+
+.founders-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 40px;
+    max-width: 1000px;
+    margin: 0 auto;
+}
+
+.founder-card {
+    background: white;
+    padding: 30px;
+    border-radius: 20px;
+    text-align: center;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+    transition: all 0.3s ease;
+}
+
+.founder-card:hover {
+    transform: translateY(-8px);
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+}
+
+.founder-card.placeholder {
+    opacity: 0.6;
+    border: 2px dashed #d1d1d6;
+    background: #fafafa;
+}
+
+.founder-image {
+    width: 120px;
+    height: 120px;
+    margin: 0 auto 20px;
+    border-radius: 50%;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #f0f0f2;
+}
+
+.founder-photo {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.founder-placeholder {
+    font-size: 48px;
+    color: #86868b;
+}
+
+.founder-info h3 {
+    font-size: 24px;
+    font-weight: 600;
+    margin-bottom: 8px;
+    color: #1d1d1f;
+}
+
+.founder-title {
+    font-size: 16px;
+    color: #007aff;
+    font-weight: 500;
+    margin-bottom: 16px;
+}
+
+.founder-description {
+    font-size: 14px;
+    color: #86868b;
+    line-height: 1.5;
+}
+
+.founder-link {
+    color: #007aff;
+    text-decoration: none;
+    font-weight: 500;
+    transition: color 0.3s ease;
+}
+
+.founder-link:hover {
+    color: #0056cc;
+    text-decoration: underline;
+}
+
 /* Projects Section */
 .projects-grid {
     display: grid;
@@ -639,6 +727,22 @@ section {
     font-size: 14px;
 }
 
+.website-credit {
+    margin-top: 10px;
+}
+
+.credit-link {
+    color: #007aff;
+    text-decoration: none;
+    font-weight: 500;
+    transition: color 0.3s ease;
+}
+
+.credit-link:hover {
+    color: #0056cc;
+    text-decoration: underline;
+}
+
 /* Responsive Design */
 @media (max-width: 768px) {
     .hamburger {
@@ -688,7 +792,8 @@ section {
 
     .about-grid,
     .projects-grid,
-    .resources-grid {
+    .resources-grid,
+    .founders-grid {
         grid-template-columns: 1fr;
     }
 
@@ -761,7 +866,8 @@ section {
 .about-card,
 .project-card,
 .resource-category,
-.contact-form {
+.contact-form,
+.founder-card {
     animation: fadeInUp 0.8s ease-out;
 }
 
