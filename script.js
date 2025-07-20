@@ -3,6 +3,53 @@ const hamburger = document.querySelector('.hamburger');
 const navMenu = document.querySelector('.nav-menu');
 const body = document.body;
 
+// Dark mode functionality
+const themeToggle = document.querySelector('.theme-toggle');
+const prefersDarkScheme = window.matchMedia('(prefers-color-scheme: dark)');
+
+// Initialize theme based on user preference or system setting
+function initializeTheme() {
+    const savedTheme = localStorage.getItem('theme');
+    
+    if (savedTheme) {
+        document.documentElement.setAttribute('data-theme', savedTheme);
+    } else if (prefersDarkScheme.matches) {
+        document.documentElement.setAttribute('data-theme', 'dark');
+    } else {
+        document.documentElement.setAttribute('data-theme', 'light');
+    }
+}
+
+// Toggle theme function
+function toggleTheme() {
+    const currentTheme = document.documentElement.getAttribute('data-theme');
+    const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+    
+    document.documentElement.setAttribute('data-theme', newTheme);
+    localStorage.setItem('theme', newTheme);
+    
+    // Add transition effect
+    document.body.style.transition = 'background-color 0.3s ease, color 0.3s ease';
+    setTimeout(() => {
+        document.body.style.transition = '';
+    }, 300);
+}
+
+// Listen for system theme changes
+prefersDarkScheme.addEventListener('change', (e) => {
+    if (!localStorage.getItem('theme')) {
+        document.documentElement.setAttribute('data-theme', e.matches ? 'dark' : 'light');
+    }
+});
+
+// Initialize theme on page load
+initializeTheme();
+
+// Add event listener to theme toggle
+if (themeToggle) {
+    themeToggle.addEventListener('click', toggleTheme);
+}
+
 hamburger.addEventListener('click', (e) => {
     e.preventDefault();
     hamburger.classList.toggle('active');
