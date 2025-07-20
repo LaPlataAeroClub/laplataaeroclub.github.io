@@ -1,337 +1,346 @@
-// Mobile Navigation Toggle
+// Enhanced mobile navigation with smoother interactions
 const hamburger = document.querySelector('.hamburger');
 const navMenu = document.querySelector('.nav-menu');
+const body = document.body;
 
-hamburger.addEventListener('click', () => {
+hamburger.addEventListener('click', (e) => {
+    e.preventDefault();
     hamburger.classList.toggle('active');
     navMenu.classList.toggle('active');
+    
+    // Prevent body scroll when menu is open
+    if (navMenu.classList.contains('active')) {
+        body.style.overflow = 'hidden';
+    } else {
+        body.style.overflow = '';
+    }
 });
 
-// Close mobile menu when clicking on a link
-document.querySelectorAll('.nav-link').forEach(n => n.addEventListener('click', () => {
-    hamburger.classList.remove('active');
-    navMenu.classList.remove('active');
-}));
+// Close mobile menu when clicking on a link with smooth transition
+document.querySelectorAll('.nav-link').forEach(link => {
+    link.addEventListener('click', () => {
+        hamburger.classList.remove('active');
+        navMenu.classList.remove('active');
+        body.style.overflow = '';
+    });
+});
 
-// Smooth scrolling for navigation links
+// Close menu when clicking outside
+document.addEventListener('click', (e) => {
+    if (!hamburger.contains(e.target) && !navMenu.contains(e.target)) {
+        hamburger.classList.remove('active');
+        navMenu.classList.remove('active');
+        body.style.overflow = '';
+    }
+});
+
+// Enhanced smooth scrolling with easing
 document.querySelectorAll('a[href^="#"]').forEach(anchor => {
     anchor.addEventListener('click', function (e) {
         e.preventDefault();
         const target = document.querySelector(this.getAttribute('href'));
         if (target) {
-            const offsetTop = target.offsetTop - 80; // Account for fixed navbar
-            window.scrollTo({
-                top: offsetTop,
-                behavior: 'smooth'
-            });
+            const offsetTop = target.offsetTop - 80;
+            const startPosition = window.pageYOffset;
+            const distance = offsetTop - startPosition;
+            const duration = Math.min(Math.abs(distance) / 2, 1000); // Dynamic duration
+            let start = null;
+
+            function step(timestamp) {
+                if (!start) start = timestamp;
+                const progress = timestamp - start;
+                const percentage = Math.min(progress / duration, 1);
+                
+                // Ease-out cubic function for smoother animation
+                const ease = 1 - Math.pow(1 - percentage, 3);
+                
+                window.scrollTo(0, startPosition + (distance * ease));
+                
+                if (progress < duration) {
+                    window.requestAnimationFrame(step);
+                }
+            }
+            
+            window.requestAnimationFrame(step);
         }
     });
 });
 
-// Navbar background on scroll
-window.addEventListener('scroll', () => {
-    const navbar = document.querySelector('.navbar');
-    if (window.scrollY > 50) {
-        navbar.style.background = 'rgba(255, 255, 255, 0.98)';
-        navbar.style.boxShadow = '0 2px 20px rgba(0, 0, 0, 0.1)';
-    } else {
-        navbar.style.background = 'rgba(255, 255, 255, 0.95)';
-        navbar.style.boxShadow = 'none';
-    }
-});
-
-// Enhanced Intersection Observer for smoother animations
-const observerOptions = {
-    threshold: 0.15,
-    rootMargin: '0px 0px -80px 0px'
-};
-
-const observer = new IntersectionObserver((entries) => {
-    entries.forEach((entry, index) => {
-        if (entry.isIntersecting) {
-            // Add staggered delay based on element position
-            setTimeout(() => {
-                entry.target.style.animation = 'fadeInUp 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards';
-                entry.target.style.opacity = '1';
-                entry.target.style.transform = 'translateY(0)';
-            }, index * 100);
-        }
-    });
-}, observerOptions);
-
-// Enhanced scroll animations with performance optimization
-document.addEventListener('DOMContentLoaded', () => {
-    // Initialize animations for all cards
-    const animatedElements = document.querySelectorAll('.about-card, .project-card, .resource-category, .founder-card');
-    
-    animatedElements.forEach((el, index) => {
-        el.style.opacity = '0';
-        el.style.transform = 'translateY(40px)';
-        el.style.transition = 'all 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94)';
-        observer.observe(el);
-    });
-
-    // Add parallax effect to section headers
-    const sectionHeaders = document.querySelectorAll('.section-header');
-    sectionHeaders.forEach(header => {
-        header.style.opacity = '0';
-        header.style.transform = 'translateY(30px)';
-        observer.observe(header);
-    });
-});
-
-// Enhanced navbar scroll behavior
-const navbar = document.querySelector('.navbar');
-let lastScrollY = window.scrollY;
-let ticking = false;
+// Enhanced scroll handler with performance optimization and parallax effects
+let scrollTicking = false;
+let lastScrollY = 0;
 
 function updateNavbar() {
+    const navbar = document.querySelector('.navbar');
     const scrollY = window.scrollY;
     
-    if (scrollY > 100) {
+    // Enhanced navbar styling based on scroll position
+    if (scrollY > 50) {
         navbar.classList.add('scrolled');
     } else {
         navbar.classList.remove('scrolled');
     }
     
-    // Hide/show navbar based on scroll direction
-    if (scrollY > lastScrollY && scrollY > 200) {
-        navbar.style.transform = 'translateY(-100%)';
-    } else {
-        navbar.style.transform = 'translateY(0)';
+    // Subtle parallax effect for hero section
+    const hero = document.querySelector('.hero');
+    if (hero && scrollY < window.innerHeight) {
+        const parallaxElements = hero.querySelectorAll('.parallax-element, .rocket-animation, .stars');
+        parallaxElements.forEach((element, index) => {
+            const speed = 0.5 + (index * 0.1); // Different speeds for depth
+            const yPos = -(scrollY * speed);
+            element.style.transform = `translateY(${yPos}px)`;
+        });
     }
     
     lastScrollY = scrollY;
-    ticking = false;
+    scrollTicking = false;
 }
 
 function requestNavbarUpdate() {
-    if (!ticking) {
+    if (!scrollTicking) {
         requestAnimationFrame(updateNavbar);
-        ticking = true;
+        scrollTicking = true;
     }
 }
 
-window.addEventListener('scroll', requestNavbarUpdate);
+// Throttled scroll listener for better performance
+let scrollTimeout;
+window.addEventListener('scroll', () => {
+    requestNavbarUpdate();
+    
+    // Clear existing timeout
+    clearTimeout(scrollTimeout);
+    
+    // Set new timeout for additional scroll effects
+    scrollTimeout = setTimeout(() => {
+        // Add any scroll-end effects here
+    }, 100);
+}, { passive: true });
 
-// Enhanced rocket animation with modern interactions
+// Enhanced intersection observer for smoother animations
+const observerOptions = {
+    threshold: [0, 0.1, 0.5],
+    rootMargin: '0px 0px -50px 0px'
+};
+
+const observer = new IntersectionObserver((entries) => {
+    entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+            // Add loading class for smoother transition
+            entry.target.classList.add('loaded');
+            entry.target.style.opacity = '1';
+            entry.target.style.transform = 'translateY(0) scale(1)';
+            
+            // Add stagger effect for multiple elements in same container
+            const siblings = Array.from(entry.target.parentNode.children);
+            const index = siblings.indexOf(entry.target);
+            
+            setTimeout(() => {
+                entry.target.style.animation = `fadeInUp 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards`;
+            }, index * 100); // Stagger by 100ms
+            
+            // Stop observing once animated
+            observer.unobserve(entry.target);
+        }
+    });
+}, observerOptions);
+
+// Enhanced scroll-triggered animations
+const scrollAnimationObserver = new IntersectionObserver((entries) => {
+    entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+            entry.target.classList.add('animate');
+            
+            // Add special effects for specific elements
+            if (entry.target.classList.contains('section-header')) {
+                entry.target.style.animation = 'fadeInUp 1s cubic-bezier(0.16, 1, 0.3, 1) forwards';
+            }
+        }
+    });
+}, {
+    threshold: 0.1,
+    rootMargin: '0px 0px -100px 0px'
+});
+
+// Initialize enhanced animations
+document.addEventListener('DOMContentLoaded', () => {
+    // Add loading state to prevent flash
+    document.body.classList.add('loading');
+    
+    setTimeout(() => {
+        document.body.classList.remove('loading');
+        document.body.classList.add('loaded');
+    }, 100);
+    
+    // Setup intersection observers
+    const animatedElements = document.querySelectorAll('.about-card, .project-card, .resource-category');
+    const scrollElements = document.querySelectorAll('.section-header, .competition-card, .contact-info');
+    
+    animatedElements.forEach((el) => {
+        el.style.opacity = '0';
+        el.style.transform = 'translateY(32px) scale(0.95)';
+        el.style.transition = 'all 0.8s cubic-bezier(0.16, 1, 0.3, 1)';
+        observer.observe(el);
+    });
+    
+    scrollElements.forEach((el) => {
+        el.classList.add('animate-on-scroll');
+        scrollAnimationObserver.observe(el);
+    });
+    
+    // Add parallax class to hero elements
+    const heroElements = document.querySelectorAll('.rocket-animation, .stars');
+    heroElements.forEach(el => el.classList.add('parallax-element'));
+});
+
+// Enhanced rocket animation with more sophisticated interactions
 document.addEventListener('DOMContentLoaded', () => {
     const rocket = document.querySelector('.rocket');
     const rocketAnimation = document.querySelector('.rocket-animation');
+    const stars = document.querySelectorAll('.star');
     
     if (rocket && rocketAnimation) {
         let isHovering = false;
-        let animationId;
+        let animationFrame;
         
         // Enhanced hover interactions
         rocketAnimation.addEventListener('mouseenter', () => {
             isHovering = true;
             rocket.style.animationPlayState = 'paused';
-            rocket.style.transform = 'translate(-50%, -50%) scale(1.3) rotate(15deg)';
-            rocket.style.transition = 'transform 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94)';
+            rocket.style.transform = 'translate(-50%, -50%) scale(1.1) rotate(5deg)';
+            rocket.style.filter = 'drop-shadow(0 8px 24px rgba(0, 0, 0, 0.3))';
             
-            // Add sparkle effect
-            createSparkles(rocketAnimation);
+            // Enhance stars on hover
+            stars.forEach((star, index) => {
+                setTimeout(() => {
+                    star.style.animationDuration = '1.5s';
+                    star.style.transform += ' scale(1.5)';
+                }, index * 50);
+            });
         });
         
         rocketAnimation.addEventListener('mouseleave', () => {
             isHovering = false;
             rocket.style.animationPlayState = 'running';
             rocket.style.transform = 'translate(-50%, -50%) scale(1) rotate(0deg)';
+            rocket.style.filter = 'drop-shadow(0 4px 16px rgba(0, 0, 0, 0.2))';
             
-            // Remove sparkles
-            const sparkles = rocketAnimation.querySelectorAll('.sparkle');
-            sparkles.forEach(sparkle => sparkle.remove());
+            // Reset stars
+            stars.forEach((star) => {
+                star.style.animationDuration = '3s';
+                star.style.transform = star.style.transform.replace(' scale(1.5)', '');
+            });
         });
         
-        // Click animation
+        // Enhanced click interaction
         rocketAnimation.addEventListener('click', () => {
-            rocket.style.animation = 'none';
-            rocket.style.transform = 'translate(-50%, -50%) scale(1.5) rotate(360deg)';
+            if (!isHovering) return;
             
+            // Create launch effect
+            rocket.style.transition = 'all 1s cubic-bezier(0.68, -0.55, 0.265, 1.55)';
+            rocket.style.transform = 'translate(-50%, -50%) scale(0.8) translateY(-100px) rotate(15deg)';
+            
+            // Reset after animation
             setTimeout(() => {
-                rocket.style.animation = 'float 4s ease-in-out infinite';
-                rocket.style.transform = 'translate(-50%, -50%)';
-            }, 600);
+                rocket.style.transition = 'all 0.25s cubic-bezier(0.16, 1, 0.3, 1)';
+                rocket.style.transform = 'translate(-50%, -50%) scale(1.1) rotate(5deg)';
+            }, 1000);
         });
         
-        // Random subtle movements when not hovering
-        function subtleMovement() {
-            if (!isHovering) {
-                const randomX = (Math.random() - 0.5) * 15;
-                const randomY = (Math.random() - 0.5) * 15;
-                const randomRotation = (Math.random() - 0.5) * 8;
-                
-                rocket.style.transform = `translate(calc(-50% + ${randomX}px), calc(-50% + ${randomY}px)) rotate(${randomRotation}deg)`;
-                
-                setTimeout(() => {
-                    if (!isHovering) {
-                        rocket.style.transform = 'translate(-50%, -50%) rotate(0deg)';
-                    }
-                }, 1500);
-            }
+        // Add mouse move parallax effect
+        rocketAnimation.addEventListener('mousemove', (e) => {
+            if (!isHovering) return;
             
-            animationId = setTimeout(subtleMovement, Math.random() * 4000 + 3000);
-        }
-        
-        subtleMovement();
-    }
-});
-
-// Create sparkle effect
-function createSparkles(container) {
-    for (let i = 0; i < 8; i++) {
-        const sparkle = document.createElement('div');
-        sparkle.className = 'sparkle';
-        sparkle.style.cssText = `
-            position: absolute;
-            width: 4px;
-            height: 4px;
-            background: white;
-            border-radius: 50%;
-            pointer-events: none;
-            top: ${Math.random() * 100}%;
-            left: ${Math.random() * 100}%;
-            animation: sparkleFloat 2s ease-out infinite;
-            animation-delay: ${Math.random() * 1}s;
-            box-shadow: 0 0 10px rgba(255, 255, 255, 0.8);
-        `;
-        container.appendChild(sparkle);
-    }
-}
-
-// Enhanced star animations with random positioning
-document.addEventListener('DOMContentLoaded', () => {
-    const stars = document.querySelectorAll('.star');
-    stars.forEach((star, index) => {
-        // More dynamic positioning
-        const randomTop = Math.random() * 70 + 15;
-        const randomLeft = Math.random() * 70 + 15;
-        star.style.top = randomTop + '%';
-        star.style.left = randomLeft + '%';
-        
-        // Varied animation properties
-        star.style.animationDelay = Math.random() * 3 + 's';
-        star.style.animationDuration = (Math.random() * 2 + 2) + 's';
-        
-        // Add random movement
-        star.addEventListener('animationiteration', () => {
-            const newTop = Math.random() * 70 + 15;
-            const newLeft = Math.random() * 70 + 15;
-            star.style.transition = 'all 2s ease-in-out';
-            star.style.top = newTop + '%';
-            star.style.left = newLeft + '%';
+            const rect = rocketAnimation.getBoundingClientRect();
+            const x = e.clientX - rect.left;
+            const y = e.clientY - rect.top;
+            const centerX = rect.width / 2;
+            const centerY = rect.height / 2;
+            
+            const rotateX = (y - centerY) / centerY * 5; // Max 5 degrees
+            const rotateY = (x - centerX) / centerX * 5; // Max 5 degrees
+            
+            rocket.style.transform = `translate(-50%, -50%) scale(1.1) rotateX(${-rotateX}deg) rotateY(${rotateY}deg) rotate(5deg)`;
         });
-    });
+    }
 });
 
-// Add sparkle animation CSS
-const sparkleStyles = document.createElement('style');
-sparkleStyles.textContent = `
-    @keyframes sparkleFloat {
-        0% {
-            opacity: 0;
-            transform: translateY(0) scale(0);
-        }
-        50% {
-            opacity: 1;
-            transform: translateY(-20px) scale(1);
-        }
-        100% {
-            opacity: 0;
-            transform: translateY(-40px) scale(0);
-        }
-    }
-`;
-document.head.appendChild(sparkleStyles);
-
-// Active navigation link highlighting
+// Enhanced active navigation highlighting with smooth transitions
+let activeNavTimeout;
 window.addEventListener('scroll', () => {
-    const sections = document.querySelectorAll('section[id]');
-    const navLinks = document.querySelectorAll('.nav-link');
-    
-    let current = '';
-    sections.forEach(section => {
-        const sectionTop = section.offsetTop - 100;
-        const sectionHeight = section.clientHeight;
-        if (window.pageYOffset >= sectionTop && window.pageYOffset < sectionTop + sectionHeight) {
-            current = section.getAttribute('id');
-        }
-    });
-    
-    navLinks.forEach(link => {
-        link.classList.remove('active');
-        if (link.getAttribute('href') === '#' + current) {
-            link.classList.add('active');
-        }
-    });
-});
+    clearTimeout(activeNavTimeout);
+    activeNavTimeout = setTimeout(() => {
+        const sections = document.querySelectorAll('section[id]');
+        const navLinks = document.querySelectorAll('.nav-link');
+        
+        let current = '';
+        sections.forEach(section => {
+            const sectionTop = section.offsetTop - 150;
+            const sectionHeight = section.clientHeight;
+            if (window.pageYOffset >= sectionTop && window.pageYOffset < sectionTop + sectionHeight) {
+                current = section.getAttribute('id');
+            }
+        });
+        
+        navLinks.forEach(link => {
+            link.classList.remove('active');
+            if (link.getAttribute('href') === '#' + current) {
+                link.classList.add('active');
+            }
+        });
+    }, 10);
+}, { passive: true });
 
-// Add CSS for active nav link
-const style = document.createElement('style');
-style.textContent = `
-    .nav-link.active {
-        color: #007aff;
-    }
-    
-    .nav-link.active::after {
-        width: 100%;
-    }
-`;
-document.head.appendChild(style);
-
-// Keyboard navigation support
+// Enhanced keyboard navigation and accessibility
 document.addEventListener('keydown', (e) => {
+    // Close mobile menu with Escape
     if (e.key === 'Escape') {
-        // Close mobile menu
         hamburger.classList.remove('active');
         navMenu.classList.remove('active');
+        body.style.overflow = '';
+    }
+    
+    // Navigate sections with arrow keys (when not in input)
+    if (!e.target.matches('input, textarea, select')) {
+        const sections = document.querySelectorAll('section[id]');
+        const currentSection = Array.from(sections).find(section => {
+            const rect = section.getBoundingClientRect();
+            return rect.top <= 100 && rect.bottom > 100;
+        });
         
-        // Close notifications
-        const notification = document.querySelector('.notification');
-        if (notification) {
-            removeNotification(notification);
+        if (currentSection) {
+            const index = Array.from(sections).indexOf(currentSection);
+            
+            if (e.key === 'ArrowDown' && index < sections.length - 1) {
+                e.preventDefault();
+                sections[index + 1].scrollIntoView({ behavior: 'smooth', block: 'start' });
+            } else if (e.key === 'ArrowUp' && index > 0) {
+                e.preventDefault();
+                sections[index - 1].scrollIntoView({ behavior: 'smooth', block: 'start' });
+            }
         }
     }
 });
 
-// Performance optimization: Throttle scroll events
-function throttle(func, wait) {
-    let timeout;
-    return function executedFunction(...args) {
-        const later = () => {
-            clearTimeout(timeout);
-            func(...args);
-        };
-        clearTimeout(timeout);
-        timeout = setTimeout(later, wait);
-    };
+// Add loading state management
+window.addEventListener('load', () => {
+    document.body.classList.add('page-loaded');
+    
+    // Trigger any delayed animations
+    setTimeout(() => {
+        document.querySelectorAll('.animate-on-scroll').forEach(el => {
+            el.classList.add('animate');
+        });
+    }, 200);
+});
+
+// Enhanced performance monitoring
+if ('requestIdleCallback' in window) {
+    requestIdleCallback(() => {
+        // Preload any heavy resources during idle time
+        const images = document.querySelectorAll('img[data-src]');
+        images.forEach(img => {
+            img.src = img.dataset.src;
+        });
+    });
 }
-
-// Apply throttling to scroll events
-const throttledScrollHandler = throttle(() => {
-    // Navbar background
-    const navbar = document.querySelector('.navbar');
-    if (window.scrollY > 50) {
-        navbar.style.background = 'rgba(255, 255, 255, 0.98)';
-        navbar.style.boxShadow = '0 2px 20px rgba(0, 0, 0, 0.1)';
-    } else {
-        navbar.style.background = 'rgba(255, 255, 255, 0.95)';
-        navbar.style.boxShadow = 'none';
-    }
-    
-    // Parallax effect
-    const scrolled = window.pageYOffset;
-    const heroImage = document.querySelector('.hero-image');
-    const heroContent = document.querySelector('.hero-content');
-    
-    if (heroImage && scrolled < window.innerHeight) {
-        heroImage.style.transform = `translateY(${scrolled * 0.3}px)`;
-    }
-    
-    if (heroContent && scrolled < window.innerHeight) {
-        heroContent.style.transform = `translateY(${scrolled * 0.1}px)`;
-    }
-}, 16); // ~60fps
-
-window.addEventListener('scroll', throttledScrollHandler);

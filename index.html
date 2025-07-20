@@ -12,7 +12,7 @@
 </head>
 <body>
     <!-- Navigation -->
-    <nav class="navbar">
+    <nav class="navbar" role="navigation" aria-label="Main navigation">
         <div class="nav-container">
             <div class="nav-logo">
                 <img src="removebglpaclogo.png" alt="LPAC Logo" class="logo">
@@ -38,33 +38,35 @@
                     <a href="#contact" class="nav-link">Contact</a>
                 </li>
             </ul>
-            <div class="hamburger">
+            <button class="hamburger" aria-label="Toggle navigation menu">
                 <span class="bar"></span>
                 <span class="bar"></span>
                 <span class="bar"></span>
-            </div>
+            </button>
         </div>
     </nav>
 
-    <!-- Hero Section -->
+    <!-- Enhanced hero section with dynamic background -->
     <section id="home" class="hero">
         <div class="hero-content">
-            <h1 class="hero-title">Reach for the Stars</h1>
-            <p class="hero-subtitle">Join La Plata Aerospace Club and explore the wonders of aerospace engineering, rocketry, and space exploration.</p>
-            <div class="hero-buttons">
-                <a href="#about" class="btn btn-primary">Learn More</a>
-                <a href="https://www.instagram.com/laplataaeroclub/" target="_blank" class="btn btn-secondary">Follow Us</a>
+            <div>
+                <h1 class="hero-title">Reach for the Stars</h1>
+                <p class="hero-subtitle">Join La Plata Aerospace Club and explore the wonders of aerospace engineering, rocketry, and space exploration.</p>
+                <div class="hero-buttons">
+                    <a href="#about" class="btn btn-primary pulse-on-hover">Learn More</a>
+                    <a href="https://www.instagram.com/laplataaeroclub/" target="_blank" class="btn btn-secondary pulse-on-hover" rel="noopener">Follow Us</a>
+                </div>
             </div>
-        </div>
-        <div class="hero-image">
-            <div class="rocket-animation">
-                <div class="rocket">🚀</div>
-                <div class="stars">
-                    <div class="star"></div>
-                    <div class="star"></div>
-                    <div class="star"></div>
-                    <div class="star"></div>
-                    <div class="star"></div>
+            <div class="hero-image">
+                <div class="rocket-animation parallax-element">
+                    <div class="rocket" role="img" aria-label="Rocket animation">🚀</div>
+                    <div class="stars parallax-element" aria-hidden="true">
+                        <div class="star"></div>
+                        <div class="star"></div>
+                        <div class="star"></div>
+                        <div class="star"></div>
+                        <div class="star"></div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -250,11 +252,11 @@
                     <h3>Join La Plata Aerospace Club</h3>
                     <p>Whether you're a beginner or have experience in aerospace, we welcome all students who are passionate about space exploration and engineering.</p>
                     <div class="contact-links">
-                        <a href="https://www.instagram.com/laplataaeroclub/" target="_blank" class="contact-link">
+                        <a href="https://www.instagram.com/laplataaeroclub/" target="_blank" class="contact-link" rel="noopener">
                             <span class="link-icon">📱</span>
                             <span>Follow us on Instagram</span>
                         </a>
-                        <a href="https://laplata.ccboe.com/students/organizations" target="_blank" class="contact-link">
+                        <a href="https://laplata.ccboe.com/students/organizations" target="_blank" class="contact-link" rel="noopener">
                             <span class="link-icon">🏫</span>
                             <span>School Organizations</span>
                         </a>
@@ -277,14 +279,14 @@
                     <span class="footer-logo-text">La Plata Aerospace Club</span>
                 </div>
                 <div class="footer-links">
-                    <a href="https://www.instagram.com/laplataaeroclub/" target="_blank">Instagram</a>
-                    <a href="https://laplata.ccboe.com/students/organizations" target="_blank">School</a>
-                    <a href="https://rocketrychallenge.org/" target="_blank">ARC</a>
+                    <a href="https://www.instagram.com/laplataaeroclub/" target="_blank" rel="noopener">Instagram</a>
+                    <a href="https://laplata.ccboe.com/students/organizations" target="_blank" rel="noopener">School</a>
+                    <a href="https://rocketrychallenge.org/" target="_blank" rel="noopener">ARC</a>
                 </div>
             </div>
             <div class="footer-bottom">
                 <p>&copy; 2025 La Plata Aerospace Club. All rights reserved.</p>
-                <p class="website-credit">Website made by <a href="https://tarushv.com" target="_blank" class="credit-link">Tarushv</a></p>
+                <p class="website-credit">Website made by <a href="https://tarushv.com" target="_blank" class="credit-link" rel="noopener">Tarushv</a></p>
             </div>
         </div>
     </footer>
