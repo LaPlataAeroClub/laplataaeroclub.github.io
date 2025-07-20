@@ -575,22 +575,24 @@ section {
 
 .founders-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
-    gap: 32px;
-    max-width: 1200px;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 24px;
+    max-width: 1000px;
     margin: 0 auto;
 }
 
 .founder-card {
     background: white;
-    padding: 40px 32px;
-    border-radius: 24px;
-    text-align: center;
-    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.04);
-    transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
-    border: 1px solid rgba(0, 0, 0, 0.04);
+    padding: 24px;
+    border-radius: 20px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+    transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    border: 1px solid rgba(0, 0, 0, 0.05);
     position: relative;
     overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    min-height: 280px;
 }
 
 .founder-card::before {
@@ -599,15 +601,15 @@ section {
     top: 0;
     left: 0;
     right: 0;
-    height: 4px;
+    height: 3px;
     background: linear-gradient(90deg, #007aff, #5856d6, #af52de);
     transform: scaleX(0);
     transition: transform 0.3s ease;
 }
 
 .founder-card:hover {
-    transform: translateY(-12px) scale(1.02);
-    box-shadow: 0 24px 48px rgba(0, 0, 0, 0.12);
+    transform: translateY(-8px);
+    box-shadow: 0 12px 40px rgba(0, 0, 0, 0.15);
 }
 
 .founder-card:hover::before {
@@ -615,7 +617,7 @@ section {
 }
 
 .founder-card.placeholder {
-    opacity: 0.7;
+    opacity: 0.75;
     border: 2px dashed #d1d1d6;
     background: linear-gradient(135deg, #fafafa 0%, #f5f5f7 100%);
     transition: all 0.3s ease;
@@ -627,11 +629,44 @@ section {
     background: linear-gradient(135deg, #f8f9ff 0%, #f0f4ff 100%);
 }
 
+.founder-content {
+    flex: 1;
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.founder-content h3 {
+    font-size: 20px;
+    font-weight: 700;
+    margin-bottom: 6px;
+    color: #1d1d1f;
+    transition: color 0.3s ease;
+}
+
+.founder-card:hover .founder-content h3 {
+    color: #007aff;
+}
+
+.founder-title {
+    font-size: 12px;
+    color: #007aff;
+    font-weight: 600;
+    margin-bottom: 12px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.founder-description {
+    font-size: 13px;
+    color: #86868b;
+    line-height: 1.5;
+}
+
 .founder-image {
-    width: 140px;
-    height: 140px;
-    margin: 0 auto 24px;
-    border-radius: 32px;
+    width: 80px;
+    height: 80px;
+    margin: 0 auto;
+    border-radius: 20px;
     overflow: hidden;
     display: flex;
     align-items: center;
@@ -639,12 +674,13 @@ section {
     background: linear-gradient(135deg, #f0f0f2 0%, #e8e8ea 100%);
     position: relative;
     transition: all 0.3s ease;
-    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
+    flex-shrink: 0;
 }
 
 .founder-card:hover .founder-image {
     transform: scale(1.05);
-    box-shadow: 0 12px 32px rgba(0, 122, 255, 0.2);
+    box-shadow: 0 6px 20px rgba(0, 122, 255, 0.2);
 }
 
 .founder-photo {
@@ -659,7 +695,7 @@ section {
 }
 
 .founder-placeholder {
-    font-size: 56px;
+    font-size: 32px;
     color: #86868b;
     transition: all 0.3s ease;
 }
@@ -667,36 +703,6 @@ section {
 .founder-card.placeholder:hover .founder-placeholder {
     color: #007aff;
     transform: scale(1.1);
-}
-
-.founder-info h3 {
-    font-size: 26px;
-    font-weight: 700;
-    margin-bottom: 8px;
-    color: #1d1d1f;
-    transition: color 0.3s ease;
-}
-
-.founder-card:hover .founder-info h3 {
-    color: #007aff;
-}
-
-.founder-title {
-    font-size: 16px;
-    color: #007aff;
-    font-weight: 600;
-    margin-bottom: 16px;
-    text-transform: uppercase;
-    letter-spacing: 0.5px;
-    font-size: 14px;
-}
-
-.founder-description {
-    font-size: 15px;
-    color: #86868b;
-    line-height: 1.6;
-    max-width: 280px;
-    margin: 0 auto;
 }
 
 .founder-link {
@@ -718,12 +724,65 @@ section {
     transition: width 0.3s ease;
 }
 
-.founder-link:hover {
-    color: #0056cc;
-}
-
 .founder-link:hover::after {
     width: 100%;
+}
+
+/* Responsive design for founders grid */
+@media (max-width: 768px) {
+    .founders-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 16px;
+        max-width: 500px;
+    }
+    
+    .founder-card {
+        padding: 20px;
+        min-height: 260px;
+    }
+    
+    .founder-content h3 {
+        font-size: 18px;
+    }
+    
+    .founder-description {
+        font-size: 12px;
+    }
+    
+    .founder-image {
+        width: 70px;
+        height: 70px;
+        border-radius: 18px;
+    }
+    
+    .founder-placeholder {
+        font-size: 28px;
+    }
+}
+
+@media (max-width: 480px) {
+    .founders-grid {
+        grid-template-columns: 1fr;
+        max-width: 280px;
+    }
+    
+    .founder-card {
+        min-height: 240px;
+    }
+    
+    .founder-content h3 {
+        font-size: 16px;
+    }
+    
+    .founder-image {
+        width: 60px;
+        height: 60px;
+        border-radius: 16px;
+    }
+    
+    .founder-placeholder {
+        font-size: 24px;
+    }
 }
 
 /* Projects Section */
