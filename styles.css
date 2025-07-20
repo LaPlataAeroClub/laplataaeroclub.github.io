@@ -585,10 +585,9 @@ section {
 }
 
 .contact-content {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 80px;
-    align-items: start;
+    max-width: 600px;
+    margin: 0 auto;
+    text-align: center;
 }
 
 .contact-info h3 {
@@ -807,11 +806,6 @@ section {
     .competition-stats {
         justify-content: center;
         gap: 30px;
-    }
-
-    .contact-content {
-        grid-template-columns: 1fr;
-        gap: 40px;
     }
 
     .footer-content {
